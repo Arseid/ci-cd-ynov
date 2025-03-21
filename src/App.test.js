@@ -59,5 +59,8 @@ test('renders 2 users', async() => {
 
 });
 
-
-
+test('renders RegistrationForm and UserList components', () => {
+  render(<App />);
+  expect(screen.getByText(/sauvegarder/i)).toBeInTheDocument();
+  expect(screen.getByText(/liste des inscrits/i)).toBeInTheDocument();
+});
