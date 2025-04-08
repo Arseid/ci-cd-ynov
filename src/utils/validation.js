@@ -1,9 +1,19 @@
 export const isValidName = (name) => /^[a-zA-ZÀ-ÿ '-]+$/.test(name);
-export const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+export const isValidEmail = (email) =>
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email) &&
+    !email.includes('..');
 export const isValidPostalCode = (postalCode) => /^\d{5}$/.test(postalCode);
 export const isValidBirthdate = (birthdate) => {
-    const date = new Date(birthdate);
-    const age = new Date().getFullYear() - date.getFullYear();
+    const today = new Date();
+    const birth = new Date(birthdate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const hasHadBirthdayThisYear = (
+        today.getMonth() > birth.getMonth() ||
+        (today.getMonth() === birth.getMonth() && today.getDate() >= birth.getDate())
+    );
+
+    if (!hasHadBirthdayThisYear) age--;
+
     return age >= 18;
 };
 
