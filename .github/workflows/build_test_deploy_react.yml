@@ -46,6 +46,22 @@ jobs:
           if-no-files-found: error
       - name: Authenticate with npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      - name: Check if NPM package version has been updated
+        run: |
+          echo "Récupération de la version publiée sur npm..."
+          PUBLISHED_VERSION=$(npm view ci-cd-ynov-anna version || echo "0.0.0")
+          echo "Version publiée : $PUBLISHED_VERSION"
+
+          echo "Récupération de la version locale du package..."
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          echo "Version locale : $LOCAL_VERSION"
+
+          if [ "$PUBLISHED_VERSION" = "$LOCAL_VERSION" ]; then
+             echo "La version locale est identique à celle publiée sur npm ($LOCAL_VERSION). Veuillez incrémenter la version dans package.json."
+            exit 1
+          else
+            echo "La version locale est différente de celle sur npm. OK pour publier."
+          fi
       - name: build and publish package on NPM
         run: |
           git config --global user.email "yvesrobert.estrada@gmail.com"
