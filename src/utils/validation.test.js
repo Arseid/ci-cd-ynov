@@ -26,11 +26,18 @@ test('validates various email formats', () => {
 test('validates postal code', () => {
     expect(isValidPostalCode('75000')).toBe(true);
     expect(isValidPostalCode('123')).toBe(false);
+    expect(isValidPostalCode('ABCDE')).toBe(false);
+    expect(isValidPostalCode('7500A')).toBe(false);
 });
 
-test('validates birthdate', () => {
-    expect(isValidBirthdate('2000-01-01')).toBe(true);
-    expect(isValidBirthdate('2015-01-01')).toBe(false);
+test('validates birthdate with edge cases around turning 18', () => {
+    const today = new Date();
+
+    const nextMonth = new Date(today.getFullYear() - 18, today.getMonth() + 1, today.getDate());
+    expect(isValidBirthdate(nextMonth.toISOString().split('T')[0])).toBe(false);
+
+    const lastMonth = new Date(today.getFullYear() - 18, today.getMonth() - 1, today.getDate());
+    expect(isValidBirthdate(lastMonth.toISOString().split('T')[0])).toBe(true);
 });
 
 test('validates form', () => {
