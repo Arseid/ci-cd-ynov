@@ -5,6 +5,7 @@
 
 # dependencies
 /node_modules
+/public
 /.pnp
 .pnp.js
 /dist
@@ -14,13 +15,11 @@
 
 # production
 /build
+/public/docs
 
 # misc
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env
 
 npm-debug.log*
 yarn-debug.log*

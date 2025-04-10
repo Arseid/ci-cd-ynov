@@ -26,9 +26,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - name: npm ci, build and test
+      - name: npm ci, docs, build and test
         run: |
           npm ci
+          npm run jsdoc
           npm run build --if-present
           npm test 
       - name: Upload coverage reports to Codecov
@@ -49,7 +50,7 @@ jobs:
       - name: Check if NPM package version has been updated
         run: |
           echo "Récupération de la version publiée sur npm..."
-          PUBLISHED_VERSION=$(npm view ci-cd-ynov-anna version || echo "0.0.0")
+          PUBLISHED_VERSION=$(npm view ci-cd-ynov-yves-estrada version || echo "0.0.0")
           echo "Version publiée : $PUBLISHED_VERSION"
 
           echo "Récupération de la version locale du package..."
@@ -67,7 +68,6 @@ jobs:
           git config --global user.email "yvesrobert.estrada@gmail.com"
           git config --global user.name "albarea"
           npm run build-npm
-          npm version patch
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
