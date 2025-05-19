@@ -50,5 +50,10 @@
     "jest": "^27.5.1",
     "jsdoc": "^4.0.4",
     "rimraf": "^6.0.1"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!axios)/"
+    ]
   }
 }
