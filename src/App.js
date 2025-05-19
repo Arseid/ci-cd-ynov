@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import RegistrationForm from './components/registrationForm/RegistrationForm';
 import UserList from './components/userList/UserList';
 import './App.css';
-import axios from "axios";
+const axios = require('axios');
 
 function App() {
     const [users, setUsers] = useState([]);
