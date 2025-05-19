@@ -17,10 +17,11 @@ services:
     ports:
       - 8080:8080
 
-  server-nodejs:
+  server:
     image: nodejs
     volumes:
       - ./server:/server
+      - /server/node_modules
     build:
       context: .
       dockerfile: ./server/DockerfileNodejs
@@ -36,3 +37,19 @@ services:
     depends_on:
       - db
     command: node server.js
+
+  react:
+    image: react
+    build:
+      context: .
+      dockerfile: ./DockerfileReact
+    ports:
+      - 3000:3000
+    environment:
+      - REACT_APP_SERVER_PORT=${REACT_APP_SERVER_PORT}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - server
+    command: npm start
