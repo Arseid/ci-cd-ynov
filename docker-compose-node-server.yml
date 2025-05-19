@@ -17,26 +17,6 @@ services:
     ports:
       - 8080:8080
 
-  server-py:
-    restart: always
-    image: python
-    volumes:
-      - ./server:/server
-    build:
-      context: .
-      dockerfile: ./server/DockerfilePython
-    ports:
-      - 8000:8000
-    environment:
-      - MYSQL_HOST=${MYSQL_HOST}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - PORT=8000
-    depends_on:
-      - db
-    command: uvicorn server:app --proxy-headers --host 0.0.0.0 --port 8000
-
   server-nodejs:
     image: nodejs
     volumes:
@@ -46,13 +26,13 @@ services:
       dockerfile: ./server/DockerfileNodejs
     restart: always
     ports:
-      - 8001:8001
+      - 8000:8000
     environment:
       - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - PORT=8001
+      - PORT=8000
     depends_on:
       - db
     command: node server.js
