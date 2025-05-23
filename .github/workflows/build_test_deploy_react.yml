@@ -34,6 +34,10 @@ jobs:
           npm test
       - name: Build the stack react
         run: docker compose -f docker-compose-node-server.yml up -d
+      - name: Run e2e tests with cypress
+        uses: cypress-io/github-action@v6
+      - name: Stop the stack
+        run: docker-compose -f docker-compose-node-server.yml down
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
