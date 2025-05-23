@@ -33,7 +33,7 @@ jobs:
           npm run build --if-present
           npm test
       - name: Build the stack react
-        run: docker compose -f docker-compose-python-server.yml up -d
+        run: docker compose -f docker-compose-python-server.yml up -d --build
       - name: Run e2e tests with cypress
         uses: cypress-io/github-action@v6
       - name: Stop the stack
