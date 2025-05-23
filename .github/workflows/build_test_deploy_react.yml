@@ -44,7 +44,7 @@ jobs:
       - name: Run e2e tests with cypress
         uses: cypress-io/github-action@v6
       - name: Stop the stack
-        run: docker-compose -f docker-compose-python-server.yml down
+        run: docker compose -f docker-compose-python-server.yml down
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
