@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { validateForm } from '../../utils/validation';
 import Toastr from '../toastr/Toastr';
+import {addUser} from "../../api/api";
 
-const RegistrationForm = ({ addUser }) => {
+const RegistrationForm = ({ onSuccess }) => {
     const [form, setForm] = useState({
         name: '',
         surname: '',
         email: '',
         birthdate: '',
         city: '',
-        postalCode: ''
+        postal_code: ''
     });
     const [errors, setErrors] = useState({});
     const [successful, setSuccessful] = useState(false);
@@ -27,14 +28,19 @@ const RegistrationForm = ({ addUser }) => {
         setForm({ ...form, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setHasSubmitted(true);
         if (isFormValid) {
-            addUser(form);
-            setSuccessful(true);
-            setForm({ name: '', surname: '', email: '', birthdate: '', city: '', postalCode: '' });
-            setHasSubmitted(false);
+            try {
+                await addUser(form);
+                setSuccessful(true);
+                setForm({ name: '', surname: '', email: '', birthdate: '', city: '', postal_code: '' });
+                setHasSubmitted(false);
+                if (onSuccess) onSuccess();
+            } catch (error) {
+                console.error("Erreur lors de l'ajout:", error);
+            }
         } else {
             setSuccessful(false);
         }
@@ -50,7 +56,7 @@ const RegistrationForm = ({ addUser }) => {
                 <Toastr type="error" message="Formulaire invalide. Veuillez corriger les erreurs." />
             )}
             <form onSubmit={handleSubmit}>
-                {['name', 'surname', 'email', 'birthdate', 'city', 'postalCode'].map((field) => (
+                {['name', 'surname', 'email', 'birthdate', 'city', 'postal_code'].map((field) => (
                     <div key={field}>
                         <label htmlFor={field}>{field}</label>
                         <input
