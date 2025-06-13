@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const port = process.env.REACT_APP_SERVER_PORT || 8000;
 const api = axios.create({
-    baseURL: `http://localhost:${port}`,
+    baseURL: process.env.REACT_APP_SERVER_BASE_URL,
 });
 
 export const fetchUsers = async () => {

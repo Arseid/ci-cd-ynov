@@ -44,7 +44,7 @@ jobs:
           echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
           echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
           echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
-          echo "REACT_APP_SERVER_PORT=${{ secrets.REACT_APP_SERVER_PORT }}" >> .env
+          echo "REACT_APP_SERVER_BASE_URL=${{ secrets.REACT_APP_SERVER_BASE_URL }}" >> .env
       - name: Build the stack react
         run: docker compose -f docker-compose-python-server.yml up -d --build
       - name: Run e2e tests with cypress

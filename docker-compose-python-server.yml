@@ -59,7 +59,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      - REACT_APP_SERVER_PORT=${REACT_APP_SERVER_PORT}
+      - REACT_APP_SERVER_BASE_URL=${REACT_APP_SERVER_BASE_URL}
     volumes:
       - .:/app
       - /app/node_modules
