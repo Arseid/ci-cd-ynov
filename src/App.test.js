@@ -1,8 +1,20 @@
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import App from './App';
 import * as api from './api/api';
+import {useAuth} from "./contexts/AuthContext";
 
 jest.mock('./api/api');
+
+jest.mock('./contexts/AuthContext', () => ({
+  useAuth: jest.fn()
+}));
+
+const mockUseAuth = (userEmail = null) => {
+  useAuth.mockReturnValue({
+    user: userEmail ? { email: userEmail } : null,
+    logout: jest.fn()
+  });
+};
 
 describe('App Component', () => {
   const initialUsers = [
@@ -25,7 +37,30 @@ describe('App Component', () => {
     jest.clearAllMocks();
   });
 
+  it('should render LoginForm if user is not logged in', async () => {
+    mockUseAuth();
+
+    render(<App />);
+
+    expect(screen.getByText(/Formulaire de Login/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Logged in as/i)).not.toBeInTheDocument();
+  });
+
+  it('should show logged-in state', async () => {
+    mockUseAuth('admin@test.com');
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText((content, element) =>
+          element?.textContent === 'Logged in as admin@test.com'
+      )).toBeInTheDocument();
+    });
+  });
+
   it('should render the registration form and user list', async () => {
+    mockUseAuth('admin@test.com');
+
     render(<App />);
 
     expect(screen.getByText(/Formulaire d'inscription/i)).toBeInTheDocument();
@@ -38,6 +73,8 @@ describe('App Component', () => {
   });
 
   it('should add a user and refreshes the user list from API', async () => {
+    mockUseAuth('admin@test.com');
+
     render(<App />);
 
     const newUser = {
@@ -70,6 +107,8 @@ describe('App Component', () => {
   });
 
   it('should display an error when fetchUsers fails', async () => {
+    mockUseAuth('admin@test.com');
+
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     api.fetchUsers.mockRejectedValueOnce(new Error('Erreur API'));
     render(<App />);

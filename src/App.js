@@ -3,10 +3,13 @@ import RegistrationForm from './components/registrationForm/RegistrationForm';
 import UserList from './components/userList/UserList';
 import './App.css';
 import {fetchUsers} from "./api/api";
+import LoginForm from "./components/loginForm/LoginForm";
+import {useAuth} from "./contexts/AuthContext";
 
 function App() {
     const [users, setUsers] = useState([]);
     const [usersCount, setUsersCount] = useState(0);
+    const {user, logout} = useAuth();
 
     const loadUsers = async () => {
         try {
@@ -29,6 +32,16 @@ function App() {
                 <p>{usersCount} user(s) already registered</p>
             </header>
             <div className="App-Body">
+                <div className="component">
+                    {!user ? (
+                        <LoginForm/>
+                    ) : (
+                        <div>
+                            <p>Logged in as <strong>{user.email}</strong></p>
+                            <button onClick={logout}>Logout</button>
+                        </div>
+                    )}
+                </div>
                 <div className="component">
                     <RegistrationForm onSuccess={loadUsers}/>
                 </div>
