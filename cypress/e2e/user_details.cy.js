@@ -1,6 +1,6 @@
 describe("Affichage des détails d'un utilisateur", () => {
-    const adminEmail = 'loise.fenoll@ynov.com';
-    const adminPassword = 'PvdrTAzTeR247sDnAZBr';
+    const adminEmail = Cypress.env('TEST_ADMIN_EMAIL');
+    const adminPassword = Cypress.env('TEST_ADMIN_PASSWORD');
 
     beforeEach(() => {
         cy.visit('http://localhost:3000');
