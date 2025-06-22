@@ -32,3 +32,13 @@ export const loginUser = async (email, password) => {
         throw error;
     }
 };
+
+export const deleteUser = async (user) => {
+    try {
+        const token = localStorage.getItem("token");
+        await api.delete(`/users/${user.id}`,{headers: {Authorization: `Bearer ${token}`}});
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        throw error;
+    }
+}

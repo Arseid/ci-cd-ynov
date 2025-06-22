@@ -1,12 +1,25 @@
 import React from 'react';
+import {useAuth} from "../../contexts/AuthContext";
 
-const UserList = ({ users }) => {
+const UserList = ({ users, onDelete }) => {
+    const { user } = useAuth();
+
     return (
         <div>
             <h2>Liste des inscrits</h2>
             <ul>
-                {users.map((user, index) => (
-                    <li key={index}>{user.name} {user.surname} - {user.email}</li>
+                {users.map((u, index) => (
+                    <li key={index}>
+                        {u.name} {u.surname} - {u.email}
+                        {user && (
+                            <button
+                                style={{ marginLeft: '10px' }}
+                                onClick={() => onDelete(u)}
+                            >
+                                Supprimer
+                            </button>
+                        )}
+                    </li>
                 ))}
             </ul>
         </div>

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import RegistrationForm from './components/registrationForm/RegistrationForm';
 import UserList from './components/userList/UserList';
 import './App.css';
-import {fetchUsers} from "./api/api";
+import {deleteUser, fetchUsers} from "./api/api";
 import LoginForm from "./components/loginForm/LoginForm";
 import {useAuth} from "./contexts/AuthContext";
 
@@ -25,6 +25,15 @@ function App() {
         loadUsers();
     }, []);
 
+    const handleDeleteUser = async (userToDelete) => {
+        try {
+            await deleteUser(userToDelete);
+            await loadUsers();
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    };
+
     return (
         <div className="App">
             <header className="App-Header">
@@ -46,7 +55,7 @@ function App() {
                     <RegistrationForm onSuccess={loadUsers}/>
                 </div>
                 <div className="component">
-                    <UserList users={users} />
+                    <UserList users={users} onDelete={handleDeleteUser}/>
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ import jwt
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from pydantic import BaseModel
 from datetime import date
+from fastapi import Path
 
 MY_SECRET = "secret"
 ALGORITHM = "HS256"
@@ -31,6 +32,7 @@ app.add_middleware(
 )
 
 class User(BaseModel):
+    id: Optional[int] = None
     surname: str
     name: str
     email: str
@@ -113,8 +115,11 @@ async def create_user(login: Login):
     else:
         raise Exception("Bad credentials")
 
-@app.delete("/users")
-async def deleteUser(id: str, authorization: Optional[str] = Header(None)):
+@app.delete("/users/{id}")
+async def deleteUser(
+    id: str = Path(..., description="User ID"),
+    authorization: Optional[str] = Header(None)
+):
     if authorization is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -129,10 +134,32 @@ async def deleteUser(id: str, authorization: Optional[str] = Header(None)):
         )
     token = authorization.split(" ")[1]
     try:
-        # Décoder le jeton. PyJWT vérifie automatiquement la signature et l'expiration.
         decoded_payload = jwt.decode(token, MY_SECRET, algorithms=[ALGORITHM])
-        ##TODO delete user whith id
-        return True
+
+        conn = mysql.connector.connect(
+            database=os.getenv("MYSQL_DATABASE"),
+            user=os.getenv("MYSQL_USER"),
+            password=os.getenv("MYSQL_ROOT_PASSWORD"),
+            port=3306,
+            host=os.getenv("MYSQL_HOST")
+        )
+        cursor = conn.cursor()
+
+        # Vérifier que l'utilisateur existe
+        cursor.execute("SELECT * FROM user WHERE id = %s", (id,))
+        user = cursor.fetchone()
+        if not user:
+            cursor.close()
+            conn.close()
+            raise HTTPException(status_code=404, detail="User not found")
+
+        # Supprimer l'utilisateur
+        cursor.execute("DELETE FROM user WHERE id = %s", (id,))
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+        return {"message": f"User with id {id} deleted successfully."}
     except ExpiredSignatureError:
         print("Erreur : Le jeton JWT a expiré.")
         raise Exception("Bad credentials")
