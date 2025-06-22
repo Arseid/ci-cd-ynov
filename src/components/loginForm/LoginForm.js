@@ -20,7 +20,7 @@ const LoginForm = () => {
     };
 
     return (
-        <div>
+        <div data-testid="login-form">
             <h2>Formulaire de Login</h2>
             {error && <p style={{ color: "red" }}>{error}</p>}
             <form onSubmit={handleSubmit}>

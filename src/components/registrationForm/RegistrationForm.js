@@ -49,7 +49,7 @@ const RegistrationForm = ({ onSuccess }) => {
     const allFieldsFilled = Object.values(form).every((v) => v.trim() !== '');
 
     return (
-        <div>
+        <div data-testid="registration-form">
             <h2>Formulaire d'inscription</h2>
             {successful && <Toastr message="Registration successful!"/>}
             {hasSubmitted && !isFormValid && (
