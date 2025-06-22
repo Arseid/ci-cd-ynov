@@ -28,6 +28,28 @@ describe('Formulaire d\'inscription', () => {
 
         cy.contains(`${user.name} ${user.surname} - ${user.email}`).should('exist');
     });
+
+    after(() => {
+        const adminEmail = Cypress.env('TEST_ADMIN_EMAIL');
+        const adminPassword = Cypress.env('TEST_ADMIN_PASSWORD');
+
+        cy.visit('http://localhost:3000');
+
+        cy.get('[data-testid="login-form"]').within(() => {
+            cy.get('input#email').type(adminEmail);
+            cy.get('input#password').type(adminPassword);
+            cy.get('button[type="submit"]').contains('Login').click();
+        });
+
+        cy.contains(`Logged in as ${adminEmail}`).should('exist');
+
+        cy.contains('li', `${user.name} ${user.surname} - ${user.email}`)
+            .within(() => {
+                cy.contains('Supprimer').click();
+            });
+
+        cy.contains(`${user.name} ${user.surname} - ${user.email}`).should('not.exist');
+    });
 });
 
 describe('Formulaire d\'inscription - validation', () => {
