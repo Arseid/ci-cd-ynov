@@ -19,11 +19,11 @@ export const isValidBirthdate = (birthdate) => {
 
 export const validateForm = (form) => {
     const errors = {};
-    if (!isValidName(form.name)) errors.name = "Nom invalide.";
-    if (!isValidName(form.surname)) errors.surname = "Prénom invalide.";
+    if (!isValidName(form.name)) errors.name = "Prénom invalide.";
+    if (!isValidName(form.surname)) errors.surname = "Nom invalide.";
     if (!isValidEmail(form.email)) errors.email = "Email invalide.";
     if (!isValidBirthdate(form.birthdate)) errors.birthdate = "Vous devez avoir au moins 18 ans.";
     if (!isValidName(form.city)) errors.city = "Ville invalide.";
-    if (!isValidPostalCode(form.postal_code)) errors.postalCode = "Code postal invalide.";
+    if (!isValidPostalCode(form.postal_code)) errors.postal_code = "Code postal invalide.";
     return errors;
 };
