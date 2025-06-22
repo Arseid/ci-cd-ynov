@@ -31,6 +31,7 @@ describe('App Component', () => {
   beforeEach(() => {
     api.fetchUsers.mockResolvedValue(initialUsers);
     api.addUser.mockResolvedValue({});
+    api.deleteUser.mockResolvedValue({});
   });
 
   afterEach(() => {
@@ -120,5 +121,60 @@ describe('App Component', () => {
           expect.any(Error)
       );
     });
+  });
+
+  it('should delete a user and refresh the list', async () => {
+    mockUseAuth('admin@test.com');
+
+    const userToDelete = initialUsers[0];
+
+    api.fetchUsers.mockResolvedValueOnce(initialUsers);
+    api.fetchUsers.mockResolvedValueOnce([]);
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Jane Doe/)).toBeInTheDocument();
+    });
+
+    const deleteButton = screen.getByText(/Supprimer/);
+    fireEvent.click(deleteButton);
+
+    await waitFor(() => {
+      expect(api.deleteUser).toHaveBeenCalledWith(userToDelete);
+      expect(api.fetchUsers).toHaveBeenCalledTimes(2);
+      expect(screen.queryByText(/Jane Doe/)).not.toBeInTheDocument();
+      expect(screen.getByText(/0 user\(s\) already registered/)).toBeInTheDocument();
+    });
+  });
+
+  it('should log an error when deleteUser fails', async () => {
+    mockUseAuth('admin@test.com');
+
+    const userToDelete = initialUsers[0];
+
+    api.fetchUsers.mockResolvedValueOnce(initialUsers);
+    api.deleteUser.mockRejectedValue(new Error('Suppression échouée'));
+
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Jane Doe/)).toBeInTheDocument();
+    });
+
+    const deleteButton = screen.getByText(/Supprimer/);
+    fireEvent.click(deleteButton);
+
+    await waitFor(() => {
+      expect(api.deleteUser).toHaveBeenCalledWith(userToDelete);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'Error deleting user:',
+          expect.any(Error)
+      );
+    });
+
+    consoleErrorSpy.mockRestore();
   });
 })
