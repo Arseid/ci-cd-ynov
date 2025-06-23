@@ -1,6 +1,6 @@
 {
   "name": "ci-cd-ynov-yves-estrada",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "private": false,
   "homepage": "https://arseid.github.io/ci-cd-ynov/",
   "dependencies": {
@@ -17,7 +17,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --coverage --collectCoverageFrom=src/*js --collectCoverageFrom=!src/reportWebVitals.js --collectCoverageFrom=!src/index.js --watchAll=false",
+    "test": "react-scripts test --coverage --collectCoverageFrom='src/**/*.js' --collectCoverageFrom=!src/reportWebVitals.js --collectCoverageFrom=!src/index.js --watchAll=false",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
