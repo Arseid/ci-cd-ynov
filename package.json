@@ -1,6 +1,6 @@
 {
   "name": "ci-cd-ynov-yves-estrada",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "private": false,
   "homepage": "https://arseid.github.io/ci-cd-ynov/",
   "dependencies": {
