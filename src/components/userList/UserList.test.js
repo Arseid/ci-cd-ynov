@@ -60,7 +60,7 @@ describe('UserList', () => {
         expect(deleteButtons.length).toBe(2);
     });
 
-    test('le clic sur un utilisateur ouvre la modale de détails', () => {
+    test('le clic sur un utilisateur ouvre la modale et le bouton "Fermer" la referme', () => {
         mockUseAuth("admin@test.com");
 
         render(<UserList users={users} onDelete={jest.fn()} />);
@@ -68,8 +68,8 @@ describe('UserList', () => {
         fireEvent.click(screen.getByText(/John Doe - john.doe@example.com/));
 
         expect(screen.getByText(/Détails de l'utilisateur/)).toBeInTheDocument();
-        const emailOccurrences = screen.getAllByText(/john.doe@example.com/);
-        expect(emailOccurrences.length).toBe(2);
+        fireEvent.click(screen.getByRole('button', { name: /fermer/i }));
+        expect(screen.queryByText(/Détails de l'utilisateur/)).not.toBeInTheDocument();
     });
 
     test('le clic sur "Supprimer" appelle onDelete et n’ouvre pas la modale', () => {

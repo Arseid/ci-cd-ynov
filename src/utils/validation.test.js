@@ -41,6 +41,14 @@ describe('Validation Tests', () => {
         expect(isValidBirthdate(lastMonth.toISOString().split('T')[0])).toBe(true);
     });
 
+    it('should validate birthdate edge case: same month and day as today (exact 18 years old)', () => {
+        const today = new Date();
+        const birthdate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+        const birthdateStr = birthdate.toISOString().split('T')[0];
+
+        expect(isValidBirthdate(birthdateStr)).toBe(true);
+    });
+
     it('should validate form', () => {
         const form = {
             name: 'John',

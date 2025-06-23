@@ -62,6 +62,22 @@ describe('API service', () => {
         await expect(fetchUsers()).rejects.toThrow('fetch error');
     });
 
+    test('addUser should throw on error', async () => {
+        const user = { name: 'John' };
+        const mockError = new Error('add error');
+        api.post.mockRejectedValue(mockError);
+
+        await expect(addUser(user)).rejects.toThrow('add error');
+    });
+
+    test('loginUser should throw on error', async () => {
+        const credentials = { email: 'a@a.com', password: 'wrong' };
+        const mockError = new Error('login error');
+        api.post.mockRejectedValue(mockError);
+
+        await expect(loginUser(credentials.email, credentials.password)).rejects.toThrow('login error');
+    });
+
     test('deleteUser should throw on error', async () => {
         const user = { id: 123 };
         api.delete.mockRejectedValue(new Error('delete error'));

@@ -71,4 +71,29 @@ describe('RegistrationForm', () => {
         fireEvent.change(screen.getByLabelText(/^postal_code$/i), { target: { value: '75000' } });
         expect(screen.getByText(/Sauvegarder/i)).toBeEnabled();
     });
+
+    it('should display error if addUser fails', async () => {
+        const mockAddUser = jest.fn().mockRejectedValue(new Error('API Error'));
+        api.addUser.mockImplementation(mockAddUser);
+
+        const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {}); // Empêche l'affichage
+
+        render(<RegistrationForm />);
+
+        fireEvent.change(screen.getByLabelText(/^name$/i), {target: {value: 'John'}});
+        fireEvent.change(screen.getByLabelText(/^surname$/i), {target: {value: 'Doe'}});
+        fireEvent.change(screen.getByLabelText(/^email$/i), {target: {value: 'john.doe@example.com'}});
+        fireEvent.change(screen.getByLabelText(/^birthdate$/i), {target: {value: '2000-01-01'}});
+        fireEvent.change(screen.getByLabelText(/^city$/i), {target: {value: 'Paris'}});
+        fireEvent.change(screen.getByLabelText(/^postal_code$/i), {target: {value: '75000'}});
+
+        fireEvent.submit(screen.getByText(/Sauvegarder/i));
+
+        await waitFor(() => {
+            expect(mockAddUser).toHaveBeenCalled();
+            expect(consoleErrorSpy).toHaveBeenCalledWith("Erreur lors de l'ajout:", expect.any(Error));
+        });
+
+        consoleErrorSpy.mockRestore();
+    });
 })
