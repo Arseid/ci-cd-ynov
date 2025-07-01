@@ -1,13 +1,13 @@
-import {fetchUsers, addUser, loginUser, deleteUser} from './api';
-import api from "./axiosInstance";
+import { fetchUsers, addUser, loginUser, deleteUser } from './userApi';
+import api from "./userAxiosInstance";
 
-jest.mock('./axiosInstance', () => ({
+jest.mock('./userAxiosInstance', () => ({
     get: jest.fn(),
     post: jest.fn(),
     delete: jest.fn()
 }));
 
-describe('API service', () => {
+describe('User API', () => {
     afterEach(() => {
         jest.clearAllMocks();
     });

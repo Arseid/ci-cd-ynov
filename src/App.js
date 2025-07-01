@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import RegistrationForm from './components/registrationForm/RegistrationForm';
 import UserList from './components/userList/UserList';
 import './App.css';
-import {deleteUser, fetchUsers} from "./api/api";
+import {deleteUser, fetchUsers} from "./api/user/userApi";
 import LoginForm from "./components/loginForm/LoginForm";
 import {useAuth} from "./contexts/AuthContext";
 
@@ -38,7 +38,7 @@ function App() {
         <div className="App">
             <div className="App-Section">
                 <header className="App-Header">
-                    <h1>Users</h1>
+                    <h1>Users Section</h1>
                     <p>{usersCount} user(s) already registered</p>
                 </header>
                 <div className="App-Body">
@@ -63,7 +63,7 @@ function App() {
 
             <div className="App-Section">
                 <header className="App-Header">
-                    <h1>Posts</h1>
+                    <h1>Posts Section</h1>
                     <p>Here you can manage your posts</p>
                 </header>
                 <div className="App-Body">

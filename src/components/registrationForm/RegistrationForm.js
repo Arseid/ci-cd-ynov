@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { validateForm } from '../../utils/validation';
 import Toastr from '../toastr/Toastr';
-import {addUser} from "../../api/api";
+import {addUser} from "../../api/user/userApi";
 
 const RegistrationForm = ({ onSuccess }) => {
     const [form, setForm] = useState({

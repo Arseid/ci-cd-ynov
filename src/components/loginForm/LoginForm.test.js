@@ -2,13 +2,13 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import LoginForm from './LoginForm';
 import { useAuth } from '../../contexts/AuthContext';
-import { loginUser } from '../../api/api';
+import { loginUser } from '../../api/user/userApi';
 
 jest.mock('../../contexts/AuthContext', () => ({
     useAuth: jest.fn()
 }));
 
-jest.mock('../../api/api', () => ({
+jest.mock('../../api/user/userApi', () => ({
     loginUser: jest.fn()
 }));
 

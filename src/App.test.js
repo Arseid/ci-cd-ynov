@@ -1,9 +1,9 @@
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import App from './App';
-import * as api from './api/api';
+import * as api from './api/user/userApi';
 import {useAuth} from "./contexts/AuthContext";
 
-jest.mock('./api/api');
+jest.mock('./api/user/userApi');
 
 jest.mock('./contexts/AuthContext', () => ({
   useAuth: jest.fn()
@@ -65,7 +65,7 @@ describe('App Component', () => {
     render(<App />);
 
     expect(screen.getByText(/Formulaire d'inscription/i)).toBeInTheDocument();
-    expect(screen.getByText(/Users Manager/i)).toBeInTheDocument();
+    expect(screen.getByText(/Users Section/i)).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByText(/Jane Doe/i)).toBeInTheDocument();

@@ -1,8 +1,8 @@
 import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import RegistrationForm from './RegistrationForm';
-import * as api from '../../api/api';
+import * as api from '../../api/user/userApi';
 
-jest.mock('../../api/api');
+jest.mock('../../api/user/userApi');
 
 describe('RegistrationForm', () => {
     test('renders registration form', () => {

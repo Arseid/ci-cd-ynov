@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {loginUser} from "../../api/api";
+import {loginUser} from "../../api/user/userApi";
 import {useAuth} from "../../contexts/AuthContext";
 
 const LoginForm = () => {

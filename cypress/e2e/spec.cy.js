@@ -4,7 +4,7 @@ describe('Home page spec', () => {
     });
 
     it('doit afficher le titre principal', () => {
-        cy.contains('h1', 'Users Manager').should('be.visible');
+        cy.contains('h1', 'Users Section').should('be.visible');
     });
 
     it('doit afficher le compteur de nombre de users', () => {
