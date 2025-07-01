@@ -36,26 +36,43 @@ function App() {
 
     return (
         <div className="App">
-            <header className="App-Header">
-                <h1>Users Manager</h1>
-                <p>{usersCount} user(s) already registered</p>
-            </header>
-            <div className="App-Body">
-                <div className="component">
-                    {!user ? (
-                        <LoginForm/>
-                    ) : (
-                        <div>
-                            <p>Logged in as <strong>{user.email}</strong></p>
-                            <button onClick={logout}>Logout</button>
-                        </div>
-                    )}
+            <div className="App-Section">
+                <header className="App-Header">
+                    <h1>Users</h1>
+                    <p>{usersCount} user(s) already registered</p>
+                </header>
+                <div className="App-Body">
+                    <div className="component">
+                        {!user ? (
+                            <LoginForm />
+                        ) : (
+                            <div>
+                                <p>Logged in as <strong>{user.email}</strong></p>
+                                <button onClick={logout}>Logout</button>
+                            </div>
+                        )}
+                    </div>
+                    <div className="component">
+                        <RegistrationForm onSuccess={loadUsers} />
+                    </div>
+                    <div className="component">
+                        <UserList users={users} onDelete={handleDeleteUser} />
+                    </div>
                 </div>
-                <div className="component">
-                    <RegistrationForm onSuccess={loadUsers}/>
-                </div>
-                <div className="component">
-                    <UserList users={users} onDelete={handleDeleteUser}/>
+            </div>
+
+            <div className="App-Section">
+                <header className="App-Header">
+                    <h1>Posts</h1>
+                    <p>Here you can manage your posts</p>
+                </header>
+                <div className="App-Body">
+                    <div className="component">
+                        <p>Hey</p>
+                    </div>
+                    <div className="component">
+                        <p>Cannot</p>
+                    </div>
                 </div>
             </div>
         </div>
