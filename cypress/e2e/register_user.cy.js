@@ -20,7 +20,7 @@ describe('Formulaire d\'inscription', () => {
         cy.get('input[name="city"]').type(user.city);
         cy.get('input[name="postal_code"]').type(user.postal_code);
 
-        cy.get('button[type="submit"]').should('not.be.disabled');
+        cy.contains('button[type="submit"]', 'Sauvegarder').should('not.be.disabled');
 
         cy.contains('button', 'Sauvegarder').click();
 
