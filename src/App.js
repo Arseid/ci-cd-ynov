@@ -5,10 +5,15 @@ import './App.css';
 import {deleteUser, fetchUsers} from "./api/user/userApi";
 import LoginForm from "./components/loginForm/LoginForm";
 import {useAuth} from "./contexts/AuthContext";
+import PostList from './components/postList/PostList';
+import PostForm from './components/postForm/PostForm';
+import { fetchPosts } from "./api/post/postApi";
 
 function App() {
     const [users, setUsers] = useState([]);
     const [usersCount, setUsersCount] = useState(0);
+    const [posts, setPosts] = useState([]);
+    const [postsCount, setPostsCount] = useState(0);
     const {user, logout} = useAuth();
 
     const loadUsers = async () => {
@@ -21,8 +26,20 @@ function App() {
         }
     };
 
+    const loadPosts = async () => {
+        try {
+            const data = await fetchPosts();
+            console.log('fetchPosts returned:', data);
+            setPosts(data);
+            setPostsCount(data.length);
+        } catch (error) {
+            console.error('Error loading posts:', error);
+        }
+    };
+
     useEffect(() => {
         loadUsers();
+        loadPosts();
     }, []);
 
     const handleDeleteUser = async (userToDelete) => {
@@ -64,14 +81,14 @@ function App() {
             <div className="App-Section">
                 <header className="App-Header">
                     <h1>Posts Section</h1>
-                    <p>Here you can manage your posts</p>
+                    <p>{postsCount} post(s) already registered</p>
                 </header>
                 <div className="App-Body">
                     <div className="component">
-                        <p>Hey</p>
+                        <PostForm onSuccess={loadPosts} />
                     </div>
                     <div className="component">
-                        <p>Cannot</p>
+                        <PostList posts={posts} />
                     </div>
                 </div>
             </div>
