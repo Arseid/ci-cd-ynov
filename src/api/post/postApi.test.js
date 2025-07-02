@@ -13,9 +13,7 @@ describe('Post API', () => {
 
     test('fetchPosts should call GET /posts and return data', async () => {
         const fakeResponse = {
-            data: {
-                posts: [{ title: 'Post 1', content: 'Content 1' }]
-            }
+            data: [{ title: 'Post 1', content: 'Content 1' }]
         };
         api.get.mockResolvedValue(fakeResponse);
 
