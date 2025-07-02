@@ -19,7 +19,7 @@ describe('Post API', () => {
 
         const posts = await fetchPosts();
         expect(api.get).toHaveBeenCalledWith('/posts');
-        expect(posts).toEqual(fakeResponse.data.posts);
+        expect(posts).toEqual(fakeResponse.data);
     });
 
     test('addPost should call POST /posts', async () => {
