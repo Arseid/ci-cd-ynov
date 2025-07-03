@@ -1,10 +1,10 @@
 import React from 'react';
 
-const PostList = ({ posts }) => {
+const PostList = ({ posts, className }) => {
     return (
         <div>
             <h2>Liste des Posts</h2>
-            <ul>
+            <ul className={className}>
                 {posts.map((post) => (
                     <li key={post._id} style={{marginBottom: '1em', border: '1px solid #ccc', padding: '1em'}}>
                         <h3>{post.title}</h3>

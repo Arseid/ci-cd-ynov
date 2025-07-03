@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import {useAuth} from "../../contexts/AuthContext";
 import UserDetailsModal from "../userDetailsModal/UserDetailsModal";
 
-const UserList = ({ users, onDelete }) => {
+const UserList = ({ users, onDelete, className }) => {
     const { user } = useAuth();
     const [selectedUser, setSelectedUser] = useState(null);
 
     return (
         <div>
             <h2>Liste des inscrits</h2>
-            <ul>
+            <ul className={className}>
                 {users.map((u, index) => (
                     <li
                         key={index}

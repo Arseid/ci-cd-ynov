@@ -72,7 +72,7 @@ function App() {
                         <RegistrationForm onSuccess={loadUsers} />
                     </div>
                     <div className="component">
-                        <UserList users={users} onDelete={handleDeleteUser} />
+                        <UserList users={users} onDelete={handleDeleteUser} className="scrollable-list" />
                     </div>
                 </div>
             </div>
@@ -87,7 +87,7 @@ function App() {
                         <PostForm onSuccess={loadPosts} />
                     </div>
                     <div className="component">
-                        <PostList posts={posts} />
+                        <PostList posts={posts} className="scrollable-list" />
                     </div>
                 </div>
             </div>

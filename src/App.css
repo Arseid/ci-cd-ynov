@@ -205,3 +205,9 @@ ul li:nth-child(odd) {
     gap: 15px;
   }
 }
+
+.scrollable-list {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
