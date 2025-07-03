@@ -3,7 +3,7 @@ describe('Home page spec', () => {
         cy.visit('http://localhost:3000');
     });
 
-    it('doit afficher le titre principal', () => {
+    it('doit afficher le titre principal des users', () => {
         cy.contains('h1', 'Users Section').should('be.visible');
     });
 
@@ -35,6 +35,29 @@ describe('Home page spec', () => {
 
     it('doit afficher la section Liste des inscrits', () => {
         cy.contains('h2', 'Liste des inscrits').should('be.visible');
+        cy.get('ul').should('exist');
+    });
+
+    it('doit afficher le titre principal des posts', () => {
+        cy.contains('h1', 'Posts Section').should('be.visible');
+    });
+
+    it('doit afficher le compteur de nombre de posts', () => {
+        cy.contains(/post\(s\) already registered/i).should('be.visible');
+    });
+
+    it('doit afficher le formulaire de création de post', () => {
+        cy.contains('h2', 'Créer un Post').should('be.visible');
+        cy.get('[data-testid="post-form"]').within(() => {
+            cy.get('input[name="title"]').should('exist');
+            cy.get('textarea[name="content"]').should('exist');
+            cy.get('input[name="author"]').should('exist');
+            cy.contains('button', 'Créer').should('be.disabled');
+        });
+    });
+
+    it('doit afficher la section Liste des posts', () => {
+        cy.contains('h2', 'Liste des Posts').should('be.visible');
         cy.get('ul').should('exist');
     });
 });
