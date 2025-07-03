@@ -29,7 +29,6 @@ function App() {
     const loadPosts = async () => {
         try {
             const data = await fetchPosts();
-            console.log('fetchPosts returned:', data);
             setPosts(data);
             setPostsCount(data.length);
         } catch (error) {
