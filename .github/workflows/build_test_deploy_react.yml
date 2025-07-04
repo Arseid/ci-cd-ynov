@@ -38,9 +38,7 @@ jobs:
           echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
           echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
           echo "REACT_APP_SERVER_BASE_URL=${{ secrets.REACT_APP_SERVER_BASE_URL }}" >> .env
-          echo "REACT_APP_POSTS_SERVER_BASE_URL=${{ secrets.REACT_APP_POSTS_SERVER_BASE_URL }}" >> .env          
-          echo "CYPRESS_TEST_ADMIN_EMAIL=${{ secrets.CYPRESS_TEST_ADMIN_EMAIL }}" >> .env
-          echo "CYPRESS_TEST_ADMIN_PASSWORD=${{ secrets.CYPRESS_TEST_ADMIN_PASSWORD }}" >> .env
+          echo "REACT_APP_POSTS_SERVER_BASE_URL=${{ secrets.REACT_APP_POSTS_SERVER_BASE_URL }}" >> .env
       - name: npm ci, docs, build and test
         run: |
           npm ci
