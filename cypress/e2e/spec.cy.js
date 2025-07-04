@@ -1,5 +1,12 @@
 describe('Home page spec', () => {
     beforeEach(() => {
+        cy.intercept('GET', `${Cypress.env('REACT_APP_SERVER_BASE_URL')}/users`, { utilisateurs: [
+            { id: 1, name: 'User1', surname: 'Test1', email: 'user1@test.com', birthdate: '1980-01-01', city: 'Paris', postal_code: '75000' },
+            { id: 2, name: 'User2', surname: 'Test2', email: 'user2@test.com', birthdate: '1995-01-01', city: 'Lyon', postal_code: '69000' }
+        ] });
+        cy.intercept('GET', `${Cypress.env('REACT_APP_POSTS_SERVER_BASE_URL')}/posts`, [
+            { id: 1, title: 'Hello World', content: 'Ceci est un post.', author: 'Admin' }
+        ]);
         cy.visit('http://localhost:3000');
     });
 

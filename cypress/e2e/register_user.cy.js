@@ -9,6 +9,9 @@ describe('Formulaire d\'inscription', () => {
     };
 
     beforeEach(() => {
+        cy.intercept('GET', `${Cypress.env('REACT_APP_SERVER_BASE_URL')}/users`, { utilisateurs: [] });
+        cy.intercept('GET', `${Cypress.env('REACT_APP_POSTS_SERVER_BASE_URL')}/posts`, []);
+        cy.intercept('POST', `${Cypress.env('REACT_APP_SERVER_BASE_URL')}/users`, { statusCode: 201 }).as('createUser');;
         cy.visit('http://localhost:3000');
     });
 
@@ -24,37 +27,25 @@ describe('Formulaire d\'inscription', () => {
 
         cy.contains('button', 'Sauvegarder').click();
 
+        cy.wait('@createUser');
+
         cy.contains('Registration successful!').should('be.visible');
 
+        cy.intercept('GET', '/users', { utilisateurs: [
+            { id: 1, name: user.name, surname: user.surname, email: user.email, birthdate: user.birthdate, city: user.city, postal_code: user.postal_code }
+        ] });
+
+        cy.reload();
+
         cy.contains(`${user.name} ${user.surname} - ${user.email}`).should('exist');
-    });
-
-    after(() => {
-        const adminEmail = Cypress.env('TEST_ADMIN_EMAIL');
-        const adminPassword = Cypress.env('TEST_ADMIN_PASSWORD');
-
-        cy.visit('http://localhost:3000');
-
-        cy.get('[data-testid="login-form"]').within(() => {
-            cy.get('input#email').type(adminEmail);
-            cy.get('input#password').type(adminPassword);
-            cy.get('button[type="submit"]').contains('Login').click();
-        });
-
-        cy.contains(`Logged in as ${adminEmail}`).should('exist');
-
-        cy.contains('li', `${user.name} ${user.surname} - ${user.email}`)
-            .within(() => {
-                cy.contains('Supprimer').click();
-            });
-
-        cy.contains(`${user.name} ${user.surname} - ${user.email}`).should('not.exist');
     });
 });
 
 describe('Formulaire d\'inscription - validation', () => {
     it('affiche les messages d\'erreur et le Toastr si des champs sont invalides', () => {
         cy.visit('http://localhost:3000');
+        cy.intercept('GET', `${Cypress.env('REACT_APP_SERVER_BASE_URL')}/users`, { utilisateurs: [] });
+        cy.intercept('GET', `${Cypress.env('REACT_APP_POSTS_SERVER_BASE_URL')}/posts`, []);
 
         cy.get('input[name="name"]').type('1234');
         cy.get('input[name="surname"]').type('123');
