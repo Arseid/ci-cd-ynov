@@ -46,7 +46,7 @@ jobs:
       - name: Build the stack react
         run: |
           docker compose --version
-          docker compose -f docker-compose-python-server.yml up -d
+          docker compose -f docker-compose-python-server.yml up -d --build
         env: 
           REACT_APP_SERVER_URL: ${{ secrets.REACT_APP_SERVER_URL }}
       - name: Run e2e tests with cypress
