@@ -5,11 +5,10 @@ env:
 
 # Controls when the action will run.
 on:
- # Triggers the workflow on push or pull request events but only for the main branch
- push:
-   branches: [ master ]
- pull_request:
-   branches: [ master ]
+  # Listen to a repository dispatch event by the name of `dispatch-event`
+  repository_dispatch:
+    types: [dispatch-event]
+  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -94,7 +93,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           
-  deploy:
+  deploy_pages:
     # Deploy to the github-pages environment
     environment:
       name: github-pages
