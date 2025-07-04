@@ -46,13 +46,13 @@ jobs:
       - name: Build the stack react
         run: |
           docker compose --version
-          docker compose up -d
+          docker compose -f docker-compose-python-server.yml up -d
         env: 
           REACT_APP_SERVER_URL: ${{ secrets.REACT_APP_SERVER_URL }}
       - name: Run e2e tests with cypress
         uses: cypress-io/github-action@v6
       - name: Stop the stack react
-        run: docker compose down
+        run: docker compose -f docker-compose-python-server.yml down
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
