@@ -1,70 +1,77 @@
-# ci-cd-ynov-yves-estrada
+# ci-cd-ynov
 
-Ce projet fullstack ReactJS / Flask (Python) / MySQL / Adminer a été réalisé dans le cadre d’un projet sur l’intégration et le déploiement continus (CI/CD).
-Il permet d’expérimenter le cycle de vie complet d’une application, de son développement local à l'exécution de tests automatisés et son déploiement via Docker.
-Le backend expose une API en Python via Flask, connectée à une base de données MySQL.  
-Le frontend est une application React consommant cette API.  
-Adminer permet une visualisation simplifiée de la base de données.
+Ce projet fullstack met en œuvre une architecture avec ReactJS, deux backends distincts (Flask/Python/MySQL/Adminer et ExpressJS/MongoDB) et une CI/CD.
+
+- **Gestion des utilisateurs** : API Flask Python connectée à MySQL, visualisable via Adminer.
+- **Gestion des posts** : API ExpressJS connectée à MongoDB (configurée dans le repo [ci-cd-ynov-back](https://github.com/Arseid/ci-cd-ynov-back)).
+- **Frontend** : Application React consommant les deux APIs.
 
 ## Prérequis
 
-Avant de lancer le projet, assurez-vous d’avoir **Docker** installé sur votre machine.
+- **Docker** installé ([télécharger Docker Desktop](https://www.docker.com/products/docker-desktop))
+- **Node.js** (pour développement local ou tests hors Docker)
+- **Cloner aussi le backend posts** :
+  - [ci-cd-ynov-back](https://github.com/Arseid/ci-cd-ynov-back) (Express/MongoDB)
 
-Vérifiez sa présence avec :
-
+Vérifiez Docker :
 ```bash
 docker -v
 ```
 
-Si Docker n'est pas installé, vous pouvez le télécharger depuis [le site officiel de Docker](https://www.docker.com/products/docker-desktop).  
+## Configuration
 
-## Lancer les conteneurs Docker
-
-1. Clonez le dépôt si ce n’est pas déjà fait :
-
-```bash
-git clone https://github.com/Arseid/ci-cd-ynov.git
-cd ci-cd-ynov-yves-estrada
-```
-
-2. Créer un fichier `.env`  
-   À la racine du projet, créez un fichier .env contenant les variables d’environnement nécessaires :
+À la racine du projet, créez un fichier `.env` avec :
 ```env
-# Configuration MySQL
+# Backend Utilisateurs (Flask/MySQL)
 MYSQL_HOST=db
 MYSQL_ROOT_PASSWORD=your_root_password
-MYSQL_DATABASE=your_database
+MYSQL_DATABASE=ynov_ci
 MYSQL_USER=your_user
-
-# Configuration React + Cypress
 REACT_APP_SERVER_BASE_URL=http://localhost:8000
-CYPRESS_TEST_ADMIN_EMAIL=your_test@example.com
-CYPRESS_TEST_ADMIN_PASSWORD=your_123456
+REACT_APP_POSTS_SERVER_BASE_URL=http://localhost:5000
 ```
-Remplacez les valeurs your_* par celles souhaitées.
+Adaptez les valeurs à votre environnement. Le port de l’API posts dépend de la config du repo `ci-cd-ynov-back`.
 
-3. Démarrer les conteneurs  
-   Utilisez la commande suivante pour construire et lancer les services Docker :
+## Lancer les services
+
+### 1. Backend Utilisateurs, Adminer, Frontend React
 ```bash
 docker-compose -f docker-compose-python-server.yml up -d --build
 ```
 
-Cette commande va construire et démarrer les conteneurs définis dans le fichier `docker-compose-python-server.yml`.
+### 2. Backend Posts (Express/MongoDB)
+Suivez les instructions du repo [ci-cd-ynov-back](https://github.com/Arseid/ci-cd-ynov-back) pour lancer l’API Express/MongoDB.
 
 ## Accéder aux services
-Une fois les conteneurs en cours d'exécution, vous pouvez accéder aux services suivants :  
-- **API Flask** : [http://localhost:8000](http://localhost:8000)
-- **Adminer** : [http://localhost:8080](http://localhost:8080) (utilisez les identifiants définis dans le fichier `.env` pour vous connecter)
-- **MySQL** : Le service MySQL est accessible via Adminer ou tout autre client MySQL avec les mêmes identifiants.
+- **API Utilisateurs (Flask)** : [http://localhost:8000](http://localhost:8000)
+- **API Posts (Express/MongoDB)** : [http://localhost:5000](http://localhost:5000)
+- **Adminer** : [http://localhost:8080](http://localhost:8080) (utilisez les identifiants MySQL du `.env`)
 - **Application React** : [http://localhost:3000](http://localhost:3000)
 
-## Lancer les tests d'intégration, end-to-end et unitaires de l'application React
-Pour lancer les tests d'intégration, end-to-end et unitaires, vous pouvez utiliser les commandes suivantes :
-- Pour les tests d'intégration et unitaires :
+## Fonctionnalités principales
+- **Utilisateurs** : inscription, connexion, suppression (API Flask/MySQL)
+- **Posts** : création, affichage (API Express/MongoDB)
+
+## Workflows CI/CD
+Deux workflows GitHub Actions :
+
+- **build_test.yml** :
+  - Déclenché à chaque push/pull request sur `master`
+  - Build, tests unitaires/intégration, e2e (Cypress), couverture (Codecov), génération de docs (JSDoc)
+- **build_test_deploy_react.yml** :
+  - Déclenché par un `repository_dispatch` (fin de pipeline du backend ci-cd-ynov-back)
+  - Build, tests, e2e, couverture, génération de docs, déploiement (GitHub Pages & Vercel), publication NPM si version modifiée
+
+## Lancer les tests
+- **Unitaires & intégration** :
 ```bash
 npm run test
 ```
-- Pour les tests end-to-end avec Cypress :
+- **End-to-end (Cypress)** :
 ```bash
 npm run cypress
 ```
+
+## Liens utiles
+- Backend posts (Express/MongoDB) : [ci-cd-ynov-back](https://github.com/Arseid/ci-cd-ynov-back)
+- Documentation générée : `/public/docs` après `npm run jsdoc`
