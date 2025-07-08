@@ -118,3 +118,17 @@ jobs:
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy to prod
         run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+  trigger_terraform:
+    runs-on: ubuntu-latest
+    needs: deploy_vercel
+    steps:
+      - name: Trigger Terraform repository_dispatch
+        run: |
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PERSONNAL_ACCESS_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/Arseid/ci-cd-ynov-scalingo-terraform/dispatches \
+            -d '{"event_type":"trigger-terraform"}'        
